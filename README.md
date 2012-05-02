@@ -92,6 +92,7 @@ Refactored and cleaned up code for easier maintainability
     INSTALLED_APPS = ('locking',)
     
 4) Add the following url mapping to your urls.py file:
+
     urlpatterns = patterns('',
     (r'^admin/ajax/', include('locking.urls')),
     )
@@ -121,12 +122,19 @@ Just start up your django server and look for the 200/304s http responses when t
 as you navigate to a model change list/view page where you've enabled django-locking. If you see 404s, you put the media in the wrong directory! 
 
 You should see something like this in the django server console:
+
 [02/May/2012 15:33:20] "GET /media/static/locking/css/locking.css HTTP/1.1" 304 0
+
 [02/May/2012 15:33:20] "GET /media/static/web/common/javascript/jquery-1.4.4.min.js HTTP/1.1" 304 0
+
 [02/May/2012 15:33:20] "GET /media/static/locking/js/jquery.url.packed.js HTTP/1.1" 304 0
+
 [02/May/2012 15:33:21] "GET /admin/ajax/variables.js HTTP/1.1" 200 114
+
 [02/May/2012 15:33:21] "GET /media/static/locking/js/admin.locking.js?v=1 HTTP/1.1" 304 0
+
 [02/May/2012 15:33:21] "GET /admin/ajax/redirects/medleyobjectredirect/14/is_locked/?_=1335987201245 HTTP/1.1" 200 0
+
 [02/May/2012 15:33:21] "GET /admin/ajax/redirects/medleyobjectredirect/14/lock/?_=1335987201295 HTTP/1.1" 200 0
 
 
@@ -134,6 +142,7 @@ You can also hit the media directly for troubleshooting your django-locking medi
 http://www.local.wsbradio.com:8000/media/static/locking/js/admin.locking.js
 If the url resolves, then you've completed this step correctly!  
 Basically, the code refers to the media like so.  That's why you needed to do this step.
+
 class Media:
     js = ( 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js', 
          'static/locking/js/jquery.url.packed.js',
