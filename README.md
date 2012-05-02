@@ -143,12 +143,11 @@ http://www.local.wsbradio.com:8000/media/static/locking/js/admin.locking.js
 If the url resolves, then you've completed this step correctly!  
 Basically, the code refers to the media like so.  That's why you needed to do this step.
 
-class Media:
+    class Media:
     js = ( 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js', 
          'static/locking/js/jquery.url.packed.js',
          "/admin/ajax/variables.js",
          "static/locking/js/admin.locking.js?v=1")
-
     css = {"all": ("static/locking/css/locking.css",)
     }
 
