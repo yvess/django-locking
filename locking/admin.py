@@ -16,11 +16,11 @@ class LockableAdmin(admin.ModelAdmin):
 
     class Media:
       js = ( 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js', 
-            'locking/js/jquery.url.packed.js',
+            'static/locking/js/jquery.url.packed.js',
             "/admin/ajax/variables.js",
-            "locking/js/admin.locking.js?v=1")
+            "static/locking/js/admin.locking.js?v=1")
 
-      css = {"all": ("locking/css/locking.css",)
+      css = {"all": ("static/locking/css/locking.css",)
       }
 
     def get_form(self, request, obj, *args, **kwargs):
@@ -76,12 +76,12 @@ class LockableAdmin(admin.ModelAdmin):
             if self_obj.request.user == lock.locked_by: 
                 locked_until_self = _("You have a lock on this content for %s more minute(s).") \
                     % (minutes_remaining)
-                locked_until = '<img src="%slocking/img/page_edit.png" title="%s" />' \
+                locked_until = '<img src="%sstatic/locking/img/page_edit.png" title="%s" />' \
                     % (settings.MEDIA_URL, locked_until_self)
             else:
                 locked_until = _("Still locked for %s more minute(s) by %s.") \
                     % (minutes_remaining, lock.locked_by)
-                locked_until = '<img src="%slocking/img/lock.png" title="%s" />' \
+                locked_until = '<img src="%sstatic/locking/img/lock.png" title="%s" />' \
                     % (settings.MEDIA_URL, locked_until)
             full_name = "%s %s" % (lock.locked_by.first_name,lock.locked_by.last_name)
             return u'<a href="#" id=%s class="lock-status %s" title="Locked By: %s">%s%s</a>' % (output, class_name, full_name, locked_until, " " + locked_by)
