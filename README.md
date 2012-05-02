@@ -82,48 +82,72 @@ Refactored and cleaned up code for easier maintainability
 
     git clone git@github.com:RobCombs/django-locking.git
 
-2) Add locking to list of INSTALLED_APPS in project settings file:
+2) Install the django-locking python egg:
+    
+    cd django-locking
+    sudo python setup.py install
+
+3) Add locking to the list of INSTALLED_APPS in project settings file:
 
     INSTALLED_APPS = ('locking',)
+    
+4) Add the following url mapping to your urls.py file:
+    urlpatterns = patterns('',
+    (r'^admin/ajax/', include('locking.urls')),
+    )
 
-3) Copy the media (with all of the js/css/img stuff) directory to your admin media directory:
-
-    cp -r locking/media/locking $your admin media directory
-
-Note: You can quickly test the media installation by hitting a locking media resource locally like so
-http://www.local.wsbradio.com:8000/media/locking/js/admin.locking.js
-If the url resolves, then you've completed this step correctly!  
-Basically, the code refers to the media like so.  That's why you needed to do this step.
-class Media:
-    js = ( 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js', 
-         'locking/js/jquery.url.packed.js',
-         "/admin/ajax/variables.js",
-         "locking/js/admin.locking.js?v=1")
-
-    css = {"all": ("locking/css/locking.css",)
-    }
-
-4) Add locking to the admin files that you want locking for:
+5) Add locking to the admin files that you want locking for:
 
     from locking.admin import LockableAdmin
     class YourAdmin(LockableAdmin):
        list_display = ('get_lock_for_admin')
 
-5) Add warning and expiration time outs to your Django settings file:
+6) Add warning and expiration time outs to your Django settings file:
 
     LOCKING = {'time_until_expiration': 120, 'time_until_warning': 60}
 
 
-6) Build the Lock table in the database:
+7) Build the Lock table in the database:
 
     django-admin.py/manage.py migrate locking (For south users. Recommended approach) OR
     django-admin.py/manage.py syncdb (For non south users)
+
+8) Install django-locking media:
+
+    cp -r django-locking/locking/media/locking $your static media directory
+
+Note: This is the step where people usually get lost.  
+Just start up your django server and look for the 200/304s http responses when the server attempts to load the media 
+as you navigate to a model change list/view page where you've enabled django-locking. If you see 404s, you put the media in the wrong directory! 
+
+You should see something like this in the django server console:
+[02/May/2012 15:33:20] "GET /media/static/locking/css/locking.css HTTP/1.1" 304 0
+[02/May/2012 15:33:20] "GET /media/static/web/common/javascript/jquery-1.4.4.min.js HTTP/1.1" 304 0
+[02/May/2012 15:33:20] "GET /media/static/locking/js/jquery.url.packed.js HTTP/1.1" 304 0
+[02/May/2012 15:33:21] "GET /admin/ajax/variables.js HTTP/1.1" 200 114
+[02/May/2012 15:33:21] "GET /media/static/locking/js/admin.locking.js?v=1 HTTP/1.1" 304 0
+[02/May/2012 15:33:21] "GET /admin/ajax/redirects/medleyobjectredirect/14/is_locked/?_=1335987201245 HTTP/1.1" 200 0
+[02/May/2012 15:33:21] "GET /admin/ajax/redirects/medleyobjectredirect/14/lock/?_=1335987201295 HTTP/1.1" 200 0
+
+
+You can also hit the media directly for troubleshooting your django-locking media installation: 
+http://www.local.wsbradio.com:8000/media/static/locking/js/admin.locking.js
+If the url resolves, then you've completed this step correctly!  
+Basically, the code refers to the media like so.  That's why you needed to do this step.
+class Media:
+    js = ( 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js', 
+         'static/locking/js/jquery.url.packed.js',
+         "/admin/ajax/variables.js",
+         "static/locking/js/admin.locking.js?v=1")
+
+    css = {"all": ("static/locking/css/locking.css",)
+    }
 
 That's it!
 
 Optional
 --------
-If you'd like to enforce hard locking(recommended), then add the LockingForm class to the same admin pages
+If you'd like to enforce hard locking(locking at the database level), then add the LockingForm class to the same admin pages
 
 Example:
 
