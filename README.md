@@ -153,6 +153,18 @@ Basically, the code refers to the media like so.  That's why you needed to do th
 
 That's it!
 
+Checking the installation
+-------------------------
+Simulate a lock situation -> Open 2 browsers and hit your admin site with one user logged into the 1st browser and
+other user logged into the other.  Go to the model in the admin that you've installed locking for with one browser.  
+On the other browser, go to the change list/change view pages of the model that you've installed django-locking for.
+You'll see locks in the interface similar to the screen shots above.
+
+You can also look at your server console and you'll see the client making ajax calls to the django server checking for locks like so:
+
+    [04/May/2012 15:15:09] "GET /admin/ajax/redirects/medleyobjectredirect/14/is_locked/?_=1336158909826 HTTP/1.1" 200 0
+    [04/May/2012 15:15:09] "GET /admin/ajax/redirects/medleyobjectredirect/14/lock/?_=1336158909858 HTTP/1.1" 200 0
+
 Optional
 --------
 If you'd like to enforce hard locking(locking at the database level), then add the LockingForm class to the same admin pages
