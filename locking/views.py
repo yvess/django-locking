@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from locking.decorators import user_may_change_model, is_lockable, log
 from locking import utils, LOCK_TIMEOUT, logger
 from locking.models import Lock, ObjectLockedError
+from locking import settings as _s
 
 """
 These views are called from javascript to open and close assets (objects), in order
@@ -74,10 +75,13 @@ def is_locked(request, app, model, id):
         return HttpResponse(status=200)
 @log
 def js_variables(request):
-	response = "var locking = " + simplejson.dumps({
-		'base_url': "/".join(request.path.split('/')[:-1]),
-		'timeout': LOCK_TIMEOUT,
-		'time_until_expiration': settings.LOCKING['time_until_expiration'],
+    response = "var locking = " + simplejson.dumps({
+        'base_url': "/".join(request.path.split('/')[:-1]),
+        'timeout': LOCK_TIMEOUT,
+        'time_until_expiration': settings.LOCKING['time_until_expiration'],
         'time_until_warning': settings.LOCKING['time_until_warning'],
-		})
-	return HttpResponse(response, mimetype='application/json')
+        'admin_url': "/".join(_s.ADMIN_URL.split('/')[:-1]),
+    })
+
+    return HttpResponse(response, mimetype='application/json')
+

@@ -85,15 +85,15 @@ class LockableAdmin(admin.ModelAdmin):
                     "You have a lock on this content for %s more minute(s)."
                     ) % (minutes_remaining)
                 locked_until = '''
-                    <img src="%sstatic/locking/img/page_edit.png"
-                    title="%s" />''' % (_s.MEDIA_URL, locked_until_self)
+                    <img src="%slocking/img/page_edit.png"
+                    title="%s" />''' % (_s.STATIC_URL, locked_until_self)
             else:
                 locked_until = _(
                     "Still locked for %s more minute(s) by %s."
                     ) % (minutes_remaining, lock.locked_by)
                 locked_until = '''
-                    <img src="%sstatic/locking/img/lock.png" title="%s" />'''\
-                    % (_s.MEDIA_URL, locked_until)
+                    <img src="%slocking/img/lock.png" title="%s" />'''\
+                    % (_s.STATIC_URL, locked_until)
             full_name = "%s %s" % (
                 lock.locked_by.first_name,lock.locked_by.last_name)
             return u'''
