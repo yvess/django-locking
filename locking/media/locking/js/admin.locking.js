@@ -84,9 +84,17 @@ locking.admin = function() {
 	try {
 		settings = locking;
 		// Get url parts.
-		var app = $.url.segment(1);
-		var model = $.url.segment(2);
-		var id = $.url.segment(3);
+        var adm_url = settings.admin_url;
+		var pathname = window.location.pathname;
+        if (pathname.indexOf(adm_url) == 0 && adm_url.length > 0) {
+            var app = $.url.segment(1);
+            var model = $.url.segment(2);
+            var id = $.url.segment(3);
+        } else {
+            var app = $.url.segment(0);
+            var model = $.url.segment(1);
+            var id = $.url.segment(2);
+        }
 		var base_url = settings.base_url + "/" + [app, model, id].join("/");
 		unlock_click_event(base_url);
 		
