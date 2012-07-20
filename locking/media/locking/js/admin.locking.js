@@ -60,7 +60,7 @@ function unlock_click_event(base_url){
 	//Locking toggle function
 	$("a.lock-status").click(function(){
 	    console.log('this', $(this).attr('title'))
-		user = $(this).text();
+		user = $.trim($(this).text());
 		id = $(this).attr('id');
 		if ($(this).hasClass("locked")){
 			if (confirm("User '" + user + "' is currently editing this content. Proceed with removing the lock?")) {
