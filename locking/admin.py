@@ -30,17 +30,17 @@ class LockableAdmin(admin.ModelAdmin):
         return form
 
     def changelist_view(self, request, extra_context=None):
-        # we need the request objects in a few places where it's usually not present, 
+        # we need the request objects in a few places where it's usually not present,
         # so we're tacking it on to the LockableAdmin class
         self.request = request
         return super(LockableAdmin, self).changelist_view(request,
                                                           extra_context)
 
     def save_model(self, request, obj, form, change, *args, **kwargs):
-        
+
         super(LockableAdmin, self).save_model(request, obj, form, change,
                                               *args, **kwargs)
-        
+
         try:
             # object creation doesn't need/have locking in place
             content_type = ContentType.objects.get_for_model(obj)
@@ -54,7 +54,7 @@ class LockableAdmin(admin.ModelAdmin):
 
 
     def get_lock_for_admin(self_obj, obj):
-        ''' 
+        '''
         returns the locking status along with a nice icon for the admin
         interface use in admin list display like so:
         list_display = ['title', 'get_lock_for_admin']
@@ -80,7 +80,7 @@ class LockableAdmin(admin.ModelAdmin):
             minutes_remaining = seconds_remaining/60
             locked_until = _("Still locked for %s more minute(s) by %s.") \
                 % (minutes_remaining, lock.locked_by)
-            if self_obj.request.user == lock.locked_by: 
+            if self_obj.request.user == lock.locked_by:
                 locked_until_self = _(
                     "You have a lock on this content for %s more minute(s)."
                     ) % (minutes_remaining)
