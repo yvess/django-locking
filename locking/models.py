@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 try:
     from account import models as auth
 except:
@@ -85,7 +86,7 @@ class Lock(models.Model):
         if isinstance(self.locked_at, datetime):
             # tue -> time delta until expiration
             _tue = timedelta(seconds=settings.LOCKING['time_until_expiration'])
-            if (datetime.today() - self.locked_at) < _tue:
+            if (timezone.now() - self.locked_at) < _tue:
                 return True
             else:
                 return False
@@ -105,7 +106,7 @@ class Lock(models.Model):
         a new lock using the ``lock_for`` method.
         """
         _tue = timedelta(settings.LOCKING['time_until_expiration'])
-        diff = _tue - (datetime.today() - self.locked_at)
+        diff = _tue - (timezone.now() - self.locked_at)
         return (diff.days * 24 * 60 * 60) + diff.seconds
 
     def lock_for(self, user, hard_lock=True):
@@ -136,7 +137,7 @@ class Lock(models.Model):
             raise ObjectLockedError("This object is already locked by another"
                 " user. May not override, except through the `unlock` method.")
         else:
-            self._locked_at = datetime.today()
+            self._locked_at = timezone.now()
             self._locked_by = user
             self._hard_lock = self.__init_hard_lock = hard_lock
             date = self.locked_at.strftime("%H:%M:%S")
